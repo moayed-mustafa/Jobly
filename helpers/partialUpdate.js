@@ -1,9 +1,9 @@
 /**
  * Generate a selective update query based on a request body:
  *
- * - table: where to make the query
+ * - table: where to make the query. e.g: users
  * - items: an object with keys of columns you want to update and values with
- *          updated values
+ *          updated values. e.g: {id: 3, username: moeTheGreat}
  * - key: the column that we query by (e.g. username, handle, id)
  * - id: current record ID
  *
@@ -41,4 +41,6 @@ function sqlForPartialUpdate(table, items, key, id) {
   return { query, values };
 }
 
+
+// sqlForPartialUpdate('users', {'id': 1, 'username': 'moayed'}, 'username', 2)
 module.exports = sqlForPartialUpdate;
