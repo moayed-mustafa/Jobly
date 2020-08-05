@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "company": {
+                "handle": "BMW",
+                "name": "BMW for fast cars",
+                "num_employees": 500,
+                "description": " modern company that makes high end cars",
+                "logo_url": "https://images.unsplash.com/photo-1521058001910-55b77aba2203?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1347&q=80"
+            }
+        }
+    ],
+    "required": [
+        "company"
+    ],
+    "properties": {
+        "company": {
+            "$id": "#/properties/company",
+            "type": "object",
+            "title": "The company schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "handle": "BMW",
+                    "name": "BMW for fast cars",
+                    "num_employees": 500,
+                    "description": " modern company that makes high end cars",
+                    "logo_url": "https://images.unsplash.com/photo-1521058001910-55b77aba2203?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1347&q=80"
+                }
+            ],
+            "required": [
+                "handle",
+                "name"
+
+
+            ],
+            "properties": {
+                "handle": {
+                    "$id": "#/properties/company/properties/handle",
+                    "type": "string",
+                    "title": "The handle schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "BMW"
+                    ],
+                    "maxLength": 15
+                },
+                "name": {
+                    "$id": "#/properties/company/properties/name",
+                    "type": "string",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "BMW for fast cars"
+                    ]
+                },
+                "num_employees": {
+                    "$id": "#/properties/company/properties/num_employees",
+                    "type": "integer",
+                    "title": "The num_employees schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": 0,
+                    "examples": [
+                        500
+                    ],
+                    "minimum":1
+                },
+                "description": {
+                    "$id": "#/properties/company/properties/description",
+                    "type": "string",
+                    "title": "The description schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        " modern company that makes high end cars"
+                    ]
+                },
+                "logo_url": {
+                    "$id": "#/properties/company/properties/logo_url",
+                    "type": "string",
+                    "title": "The logo_url schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "https://images.unsplash.com/photo-1521058001910-55b77aba2203?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1347&q=80"
+                    ],
+                    "format": "uri"
+
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
