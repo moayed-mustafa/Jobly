@@ -16,7 +16,7 @@ class Company{
         const results = await db.query(`
         SELECT * FROM companies
         `)
-        return results.rows
+        return results.rows[0]
     }
     //--------------------------------------------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ class Company{
         if (results.rowCount == 0) {
             throw new ExpressError(`Company ${handle} does not exist`, 404)
         }
-        return results.rows
+        return results.rows[0]
     }
     //--------------------------------------------------------------------------------------------------------------
         // returns companies that has more emloyees than min_employees

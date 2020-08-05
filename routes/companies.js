@@ -18,8 +18,8 @@ router.get('/', async (req, res, next) => {
     //  these guys amount to undefined when not send handle, min_employess, max_employees
         if (handle) {
         // send query with handle
-            const companies = await Company.getByHandle(handle)
-            return res.json({companies})
+            const company = await Company.getByHandle(handle)
+            return res.json({company})
         }
         if (max_employees && min_employees) {
             const companies = await Company.betweenMaxAndMin(max_employees, min_employees)
@@ -40,7 +40,7 @@ router.get('/', async (req, res, next) => {
 
     else {
         const companies = await Company.getAll()
-        return res.json({result:companies})
+        return res.json({companies})
         }
     } catch (e) {
         next (e)
