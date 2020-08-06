@@ -51,15 +51,16 @@ describe('GET/companies', () => {
 
         const res = await request(app).get(`/companies?handle=${test_comp.handle}`)
         expect(res.statusCode).toEqual(200)
-        expect(res.body.company.handle).toEqual(test_comp.handle)
-        expect(res.body.company.description).toEqual(test_comp.description)
+        expect(res.body.company).toHaveProperty("handle", test_comp.handle)
+        expect(res.body.company).toHaveProperty("description", test_comp.description)
 
     })
     test('test reading companies, handle on query ', async () => {
 
         const res = await request(app).get(`/companies?handle=${test_comp.handle}`)
         expect(res.statusCode).toEqual(200)
-        expect(res.body.company.handle).toEqual(test_comp.handle)
+        expect(res.body.company).toHaveProperty("handle", test_comp.handle)
+        expect(res.body.company).toHaveProperty("description", test_comp.description)
         expect(res.body.company.description).toEqual(test_comp.description)
 
     })
@@ -73,9 +74,83 @@ describe('GET/companies', () => {
     test('test reading companies, max_employees ', async () => {
         const max = 300
         const res = await request(app).get(`/companies?max_employees=${max}`)
-        console.log(res.body)
         expect(res.statusCode).toEqual(200)
         expect(res.body.companies).toContainEqual({handle:test_comp.handle, name:test_comp.name, num_employees:test_comp.num_employees})
+
+    })
+})
+//--------------------------------------------------------------------------------------------------------------
+describe('POST/companies', () => {
+    test('create a new company', async () => {
+        test_post = {
+            "handle": "test_post",
+        "name" : "test_post_Inc.",
+        "num_employees":300,
+        "description": "testing this post route right now!"
+        }
+        const res = await request(app).post(`/companies`).send(test_post)
+        expect(res.statusCode).toEqual(201)
+        expect(res.body.result).toHaveProperty("handle","test_post")
+
+    })
+
+    test('create a new company, 404', async () => {
+        test_post_2 = {
+            "handle": "test",
+        "name" : "test_post_Inc.",
+        "num_employees":300,
+        "description": "testing this post route right now!"
+        }
+        const res = await request(app).post(`/companies`).send(test_post_2)
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toHaveProperty("message","value test is taken")
+
+    })
+    test('create a new company, test schema validation', async () => {
+        test_post_3 = {
+            "handle": "testing_test_test_test_",
+        "name" : "test_post_Inc.",
+        "num_employees":300,
+        "description": "testing this post route right now!"
+        }
+        const res = await request(app).post(`/companies`).send(test_post_3)
+        console.log(res.body)
+        expect(res.statusCode).toEqual(400)
+        expect(res.body.message).toContain('instance.handle does not meet maximum length of 15')
+
+    })
+})
+//--------------------------------------------------------------------------------------------------------------
+describe('PATCH/companies', () => {
+    test('update an existing company', async () => {
+        const test_patch= {
+            "handle": "thenewtest",
+            "description": "updating this description!"
+        }
+        const res = await request(app).patch(`/companies/${test_comp.handle}`).send(test_patch)
+        expect(res.statusCode).toEqual(200)
+        expect(res.body.result).toHaveProperty("handle",test_patch.handle)
+        expect(res.body.result).toHaveProperty("description",test_patch.description)
+
+    })
+    test('update an non-existing company', async () => {
+        const test_patch= {
+            "handle": "thenewtest",
+            "description": "updating this description!"
+        }
+        const res = await request(app).patch(`/companies/theNoCompany`).send(test_patch)
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toHaveProperty('message','can not update')
+
+    })
+})
+//--------------------------------------------------------------------------------------------------------------
+describe('DELETE/companies', () => {
+    test('delete a company', async () => {
+
+        const res = await request(app).delete(`/companies/${test_comp.handle}`)
+        expect(res.statusCode).toEqual(200)
+        expect(res.body).toHaveProperty("status","Deleted")
 
     })
 })

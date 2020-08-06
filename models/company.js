@@ -74,12 +74,17 @@ class Company{
     }
 //--------------------------------------------------------------------------------------------------------------
     static async create(company) {
-        const result = await db.query(`
+        try {
+            const result = await db.query(`
         INSERT INTO companies (handle, name, num_employees, description,logo_url)
         VALUES ($1,$2,$3,$4,$5)
         RETURNING *
         `, [company.handle, company.name, company.num_employees,company.description, company.logo_url])
         return result.rows[0]
+        } catch (e) {
+            throw new ExpressError(`value ${company.handle} is taken`, 404)
+        }
+
     }
     //--------------------------------------------------------------------------------------------------------------
     static async update(company, handle) {
@@ -89,7 +94,7 @@ class Company{
         if (result.rowCount == 0) {
             throw new ExpressError('can not update', 404)
         }
-        return result.rows
+        return result.rows[0]
 
     }
     //--------------------------------------------------------------------------------------------------------------
