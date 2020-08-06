@@ -16,7 +16,7 @@ class Company{
         const results = await db.query(`
         SELECT * FROM companies
         `)
-        return results.rows[0]
+        return results.rows
     }
     //--------------------------------------------------------------------------------------------------------------
 
@@ -24,13 +24,15 @@ class Company{
         //  returns company filtered by handle
     static async getByHandle(handle){
         const results = await db.query(`
-        SELECT * FROM companies
+        SELECT c.handle as company , c.num_employees, c.description, j.title, j.salary, j.equity FROM companies AS c
+        JOIN jobs AS j
+        ON c.handle = j.company_handle
         WHERE handle = $1
         `, [handle])
         if (results.rowCount == 0) {
             throw new ExpressError(`Company ${handle} does not exist`, 404)
         }
-        return results.rows[0]
+        return results.rows
     }
     //--------------------------------------------------------------------------------------------------------------
         // returns companies that has more emloyees than min_employees
@@ -88,12 +90,13 @@ class Company{
     }
     //--------------------------------------------------------------------------------------------------------------
     static async update(company, handle) {
+        // todo: need to figure out update issue : Violating key on jobs table
         // sqlForPartialUpdate('users', {'id': 1, 'username': 'moayed'}, 'username', 2)
         const query = sqlForPartialUpdate('companies', company, 'handle',handle)
         const result = await db.query(query.query, query.values)
-        if (result.rowCount == 0) {
-            throw new ExpressError('can not update', 404)
-        }
+        // if (result.rowCount == 0) {
+        //     throw new ExpressError('can not update', 404)
+        // }
         return result.rows[0]
 
     }

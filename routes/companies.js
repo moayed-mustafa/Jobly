@@ -14,11 +14,11 @@ const companiesSchema = require('../schemas/companiesSchema.json')
 router.get('/', async (req, res, next) => {
 
     try {
-        const { handle, min_employees, max_employees } = req.query
-    //  these guys amount to undefined when not send handle, min_employess, max_employees
-        if (handle) {
-        // send query with handle
-            const company = await Company.getByHandle(handle)
+        const { search, min_employees, max_employees } = req.query
+    //  these guys amount to undefined when not send search, min_employess, max_employees
+        if (search) {
+        // send query with search
+            const company = await Company.getByHandle(search)
             return res.json({company})
         }
         if (max_employees && min_employees) {
@@ -52,7 +52,17 @@ router.get('/:handle', async (req, res, next) => {
     try {
         const {handle} = req.params
         const result = await Company.getByHandle(handle)
-        res.json({ result })
+        let data = []
+        jobs = []
+        const {company, description, num_employees} = result[0]
+        data.push({company, description, num_employees})
+        result.forEach(r => {
+
+             job = { title: r.title, salary: r.salary, equity: r.equity }
+             jobs.push(job)
+        })
+        data.push(jobs)
+        res.json({ data })
     } catch (e) {
         next(e)
     }
