@@ -21,7 +21,7 @@ CREATE TABLE jobs (
   title TEXT NOT NULL ,
   salary DECIMAL,
   equity  DECIMAL NOT NULL  check(equity < 1),
-  company_handle TEXT REFERENCES companies(handle) ON DELETE CASCADE ,
+  company_handle TEXT REFERENCES companies(handle) ON UPDATE CASCADE ON DELETE CASCADE,
   date_posted DATE DEFAULT now()
 
 );

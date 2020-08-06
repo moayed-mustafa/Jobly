@@ -15,8 +15,7 @@
         }
     ],
     "required": [
-        "title",
-        "equity"
+        "title"
 
 
     ],

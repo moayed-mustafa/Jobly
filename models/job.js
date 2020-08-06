@@ -9,7 +9,7 @@ class Job{
 
     static async getAll() {
         const results = await db.query(`
-        SELECT company_handle, title,salary,equity FROM jobs
+        SELECT id, company_handle as company, title,salary,equity FROM jobs
         `)
         return results.rows
     }

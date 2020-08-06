@@ -4,6 +4,7 @@ const schema = require('jsonschema')
 const ExpressError = require("../helpers/expressError");
 const Job = require('../models/job')
 const jobsSchema = require('../schemas/jobSchema.json')
+const jobsSchemaUpdate = require('../schemas/updateJobSchema.json')
 
 
 
@@ -81,7 +82,7 @@ router.patch('/:id', async (req, res, next) => {
     try {
         const { id } = req.params
         const data = req.body
-        const validate = schema.validate(data, jobsSchema)
+        const validate = schema.validate(data, jobsSchemaUpdate)
         if (!validate.valid) {
             let listOfErrors = validate.errors.map(error => error.stack);
             throw new ExpressError(listOfErrors, 400);
