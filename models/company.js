@@ -29,9 +29,11 @@ class Company{
         ON c.handle = j.company_handle
         WHERE handle = $1
         `, [handle])
+        console.log(results)
         if (results.rowCount == 0) {
             throw new ExpressError(`Company ${handle} does not exist`, 404)
         }
+
         return results.rows
     }
     //--------------------------------------------------------------------------------------------------------------
@@ -91,12 +93,11 @@ class Company{
     //--------------------------------------------------------------------------------------------------------------
     static async update(company, handle) {
         // todo: need to figure out update issue : Violating key on jobs table
-        // sqlForPartialUpdate('users', {'id': 1, 'username': 'moayed'}, 'username', 2)
-        const query = sqlForPartialUpdate('companies', company, 'handle',handle)
+        const query = sqlForPartialUpdate('companies', company, 'handle', handle)
         const result = await db.query(query.query, query.values)
-        // if (result.rowCount == 0) {
-        //     throw new ExpressError('can not update', 404)
-        // }
+        if (result.rowCount == 0) {
+            throw new ExpressError('can not update', 404)
+        }
         return result.rows[0]
 
     }

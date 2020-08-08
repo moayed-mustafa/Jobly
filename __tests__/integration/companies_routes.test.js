@@ -8,7 +8,6 @@ const db = require('../../db')
 
 let test_comp,test_comp1,test_comp2
 beforeEach(async () => {
-    await db.query('DELETE FROM companies')
     test_comp = {
         "handle": "test",
     "name" : "test Inc.",
@@ -32,6 +31,10 @@ beforeEach(async () => {
     await Company.create(test_comp2)
 
 })
+afterEach(async () => {
+    await db.query('DELETE FROM companies')
+
+})
 afterAll(async () => {
     await db.end()
 })
@@ -41,7 +44,6 @@ describe('GET/companies', () => {
     test('test reading companies, no query ', async () => {
 
         const res = await request(app).get('/companies')
-        // console.log(res.body)
         expect(res.statusCode).toEqual(200)
         expect(res.body.companies.length).toEqual(3)
         expect(res.body.companies[0].handle).toEqual(test_comp.handle)
@@ -49,23 +51,22 @@ describe('GET/companies', () => {
     })
 
     test('test reading companies, serach on query ', async () => {
-
-        const res = await request(app).get(`/companies?search=${test_comp.handle}`)
+        handle = test_comp1.handle
+        const res = await request(app).get(`/companies?search=${handle}`)
         console.log(res.body)
         expect(res.statusCode).toEqual(200)
         // expect(res.body.company).toHaveProperty("company", test_comp.handle)
         // expect(res.body.company).toHaveProperty("description", test_comp.description)
 
     })
-    // test('test reading companies, handle on query ', async () => {
+    test('test reading companies, serach on query, company does not exist ', async () => {
+       let handle = 'noCompany'
+        const res = await request(app).get(`/companies?search=${handle}`)
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toHaveProperty("message", "Company noCompany does not exist")
+        // expect(res.body.company).toHaveProperty("description", test_comp.description)
 
-    //     const res = await request(app).get(`/companies?companies=${test_comp.handle}`)
-    //     expect(res.statusCode).toEqual(200)
-    //     expect(res.body.company).toHaveProperty("handle", test_comp.handle)
-    //     expect(res.body.company).toHaveProperty("description", test_comp.description)
-    //     expect(res.body.company.description).toEqual(test_comp.description)
-
-    // })
+    })
     test('test reading companies, min_employees ', async () => {
         const min = 300
         const res = await request(app).get(`/companies?min_employees=${min}`)
@@ -116,7 +117,7 @@ describe('POST/companies', () => {
         "description": "testing this post route right now!"
         }
         const res = await request(app).post(`/companies`).send(test_post_3)
-        expect(res.statusCode).toEqual(404)
+        expect(res.statusCode).toEqual(400)
         expect(res.body.message).toContain('instance.handle does not meet maximum length of 15')
 
     })
@@ -139,7 +140,7 @@ describe('PATCH/companies', () => {
             "handle": "thenewtest",
             "description": "updating this description!"
         }
-        const res = await request(app).patch(`/companies/theNoCompany`).send(test_patch)
+        const res = await request(app).patch(`/companies/NoCompany`).send(test_patch)
         expect(res.statusCode).toEqual(404)
         expect(res.body).toHaveProperty('message','can not update')
 
