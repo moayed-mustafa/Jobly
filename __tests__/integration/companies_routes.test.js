@@ -9,7 +9,7 @@ const db = require('../../db')
 
 let test_user_admin, _token,test_user_not_admin, _token_not_admin, test_comp,test_comp1,test_comp2
 beforeEach(async () => {
-    // create a user
+    // create a couple of users
     test_user_admin = {
         "username": "test_user_admin",
         "password": "password",
@@ -70,7 +70,7 @@ afterAll(async () => {
 describe('GET/companies', () => {
         // add test with no admin
 
-    test('test reading companies, no query ', async () => {
+    test('test reading companies, no query, user authorized', async () => {
 
         const res = await request(app).get('/companies').send({_token})
         expect(res.statusCode).toEqual(200)
@@ -128,7 +128,7 @@ describe('POST/companies', () => {
 
     })
 
-    test('create a new company, user not authorized', async () => {
+    test('create a new company, user unauthorized', async () => {
         test_post = {
             "handle": "test_post",
         "name" : "test_post_Inc.",
@@ -183,7 +183,7 @@ describe('PATCH/companies', () => {
         expect(res.body.result).toHaveProperty("description",test_patch.description)
 
     })
-    test('update an existing company, uesr not authorized', async () => {
+    test('update an existing company, user unauthorized', async () => {
         const test_patch= {
             "handle": "thenewtest",
             "description": "updating this description!"
@@ -214,7 +214,7 @@ describe('DELETE/companies', () => {
         expect(res.body).toHaveProperty("status","Deleted")
 
     })
-    test('delete a company, user not authorized', async () => {
+    test('delete a company, user unauthorized', async () => {
         const res = await request(app).delete(`/companies/${test_comp.handle}`).send({_token:_token_not_admin})
         expect(res.statusCode).toEqual(401)
         expect(res.body).toHaveProperty("message", "Unauthorized/not admin")
