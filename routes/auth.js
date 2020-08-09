@@ -19,7 +19,7 @@ router.post('/signup', async (req,res,next,) => {
         }
         const result = await User.register(user)
 
-        return res.json(result)
+        return res.status(201).json(result)
     } catch (e) {
         return next(e)
 }

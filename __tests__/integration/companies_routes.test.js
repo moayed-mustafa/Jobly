@@ -15,7 +15,7 @@ beforeEach(async () => {
         "password": "password",
         "first_name": "test_user_admin",
         "last_name": "mustafa",
-        "email": "test_user_admin.mustafa@gmail.com",
+        "email": "test_user_admin@gmail.com",
         "photo_url": "test_user_admin",
         "is_admin": true
     }
@@ -24,7 +24,7 @@ beforeEach(async () => {
         "password": "password",
         "first_name": "not_admin",
         "last_name": "mustafa",
-        "email": "test_user_admin.mustafa@gmail.com",
+        "email": "test_user_not_admin@gmail.com",
         "photo_url": "test_user_admin",
         "is_admin": false
     }

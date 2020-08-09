@@ -19,19 +19,19 @@ beforeEach(async () => {
     test_user_admin = {
         "username": "test_user_admin",
         "password": "password",
-        "first_name": "test_user_admin",
-        "last_name": "mustafa",
-        "email": "test_user_admin.mustafa@gmail.com",
+        "first_name": "test_",
+        "last_name": "user_admin",
+        "email": "test_user_admin@gmail.com",
         "photo_url": "test_user_admin",
         "is_admin": true
     }
     test_user_not_admin = {
         "username": "not_admin",
         "password": "password",
-        "first_name": "not_admin",
-        "last_name": "mustafa",
-        "email": "test_user_admin.mustafa@gmail.com",
-        "photo_url": "test_user_admin",
+        "first_name": "test_",
+        "last_name": "user_not_admin",
+        "email": "test_user_not_admin@gmail.com",
+        "photo_url": "test_user_not_admin",
         "is_admin": false
     }
     let result = await User.register(test_user_admin)
