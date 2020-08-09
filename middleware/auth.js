@@ -5,10 +5,12 @@ const { SECRET_KEY } = require('../config')
 
 function authenticateJWT(req, res, next) {
     try {
-        console.log('.......auth working......')
+        // console.log('.......auth working......')
+        // console.log(req.body)
         const token = req.body._token;
         const payload = jwt.verify(token, SECRET_KEY)
         req.user = payload
+        // console.log(req.user)
         return next()
 
     } catch (e) {
@@ -22,7 +24,7 @@ function ensureLoggedIn(req, res, next) {
         return next({ status: 401, message: "Unauthorized" });
     }
     else {
-        console.log(req.user)
+        // console.log(req.user)
         return next();
       }
 }

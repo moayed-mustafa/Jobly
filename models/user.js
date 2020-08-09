@@ -12,7 +12,6 @@ const {SECRET_KEY } = require('../config')
 class User{
 
     static async register(data) {
-         console.log(data)
         // bcrypt the password
         const hashPw = await bcrypt.hash(data.password, BCRYPT_WORK_FACTOR)
         // add to database
