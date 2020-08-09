@@ -19,10 +19,12 @@
   },
   "homepage": "https://github.com/moayed-mustafa/Jobly#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jest": "^26.2.2",
     "jsonschema": "^1.2.6",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
     "pg": "^8.3.0",

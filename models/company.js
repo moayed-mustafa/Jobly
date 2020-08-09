@@ -29,11 +29,10 @@ class Company{
         ON c.handle = j.company_handle
         WHERE handle = $1
         `, [handle])
-        console.log(results)
         if (results.rowCount == 0) {
             throw new ExpressError(`Company ${handle} does not exist`, 404)
         }
-
+        console.log(results.rows)
         return results.rows
     }
     //--------------------------------------------------------------------------------------------------------------
@@ -44,7 +43,7 @@ class Company{
         WHERE num_employees > $1
         `, [min_employees])
         if (results.rowCount == 0) {
-            throw new ExpressError(`No company in out list employes more than ${min_employees}`, 404)
+            throw new ExpressError(`No company found`, 404)
         }
         return results.rows
     }

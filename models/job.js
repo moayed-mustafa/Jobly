@@ -97,7 +97,6 @@ class Job{
     }
     //--------------------------------------------------------------------------------------------------------------
     static async delete(id) {
-        // sqlForPartialUpdate('users', {'id': 1, 'username': 'moayed'}, 'username', 2)
 
         const result = await db.query(`
         DELETE FROM jobs

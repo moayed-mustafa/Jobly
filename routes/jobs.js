@@ -6,11 +6,22 @@ const Job = require('../models/job')
 const jobsSchema = require('../schemas/jobSchema.json')
 const jobsSchemaUpdate = require('../schemas/updateJobSchema.json')
 
+const { ensureLoggedIn } = require("../middleware/auth");
+const { ensureAdmin} = require("../middleware/auth");
+
+const { ensureCorrectUser} = require("../middleware/auth");
+
+
 
 
 // routs here
 
-router.get('/', async (req, res, next) => {
+// POST /jobs
+// PATCH /jobs/[id]
+// DELETE /jobs/[id]
+
+
+router.get('/', ensureLoggedIn, async (req, res, next) => {
     try {
         const { search, min_salary, min_equity} = req.query
     //  these guys amount to undefined when not send search, min_employess, max_employees
@@ -40,24 +51,7 @@ router.get('/', async (req, res, next) => {
     }
 })
 //--------------------------------------------------------------------------------------------------------------
-// create a job
-router.post('/', async (req, res, next) => {
-    try {
-        const job = req.body
-        const validate = schema.validate(job, jobsSchema)
-        if (!validate.valid) {
-            let listOfErrors = validate.errors.map(error => error.stack);
-            throw new ExpressError(listOfErrors, 400);
-
-        }
-        const result = await Job.create(job)
-        return res.status(201).json({ job:result})
-    } catch (e) {
-       return  next(e)
-    }
-})
-//--------------------------------------------------------------------------------------------------------------
-router.get('/:title', async (req, res, next) => {
+router.get('/:title', ensureLoggedIn, async (req, res, next) => {
     try {
         const { title } = req.params
         if (title) {
@@ -75,10 +69,26 @@ router.get('/:title', async (req, res, next) => {
         return next(e)
     }
 })
-
-
 //--------------------------------------------------------------------------------------------------------------
-router.patch('/:id', async (req, res, next) => {
+// create a job
+router.post('/', ensureAdmin, async (req, res, next) => {
+    try {
+        const job = req.body
+        const validate = schema.validate(job, jobsSchema)
+        if (!validate.valid) {
+            let listOfErrors = validate.errors.map(error => error.stack);
+            throw new ExpressError(listOfErrors, 400);
+
+        }
+        const result = await Job.create(job)
+        return res.status(201).json({ job:result})
+    } catch (e) {
+       return  next(e)
+    }
+})
+//--------------------------------------------------------------------------------------------------------------
+
+router.patch('/:id',ensureAdmin, async (req, res, next) => {
     try {
         const { id } = req.params
         const data = req.body
@@ -96,7 +106,7 @@ router.patch('/:id', async (req, res, next) => {
 })
 
 //--------------------------------------------------------------------------------------------------------------
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id',ensureAdmin, async (req, res, next) => {
     try {
 
         await Job.delete(req.params.id)

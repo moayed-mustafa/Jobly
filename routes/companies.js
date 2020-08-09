@@ -5,13 +5,18 @@ const ExpressError = require("../helpers/expressError");
 const Company = require('../models/company')
 const companiesSchema = require('../schemas/companiesSchema.json')
 
+const { ensureLoggedIn} = require("../middleware/auth");
+const { ensureAdmin} = require("../middleware/auth");
 
 
 
 // set the route
+// PATCH /companies/[handle]
+// DELETE /companies/[handle]
+
 
 // get all companies, adjust for query string parameters
-router.get('/', async (req, res, next) => {
+router.get('/', ensureLoggedIn, async (req, res, next) => {
 
     try {
         const { search, min_employees, max_employees } = req.query
@@ -19,7 +24,7 @@ router.get('/', async (req, res, next) => {
         if (search) {
         // send query with search
             const company = await Company.getByHandle(search)
-            return res.json({company})
+            return res.json({company:company[0]})
         }
         if (max_employees && min_employees) {
             const companies = await Company.betweenMaxAndMin(max_employees, min_employees)
@@ -48,7 +53,7 @@ router.get('/', async (req, res, next) => {
 })
 //--------------------------------------------------------------------------------------------------------------
 // get company by handle
-router.get('/:handle', async (req, res, next) => {
+router.get('/:handle', ensureLoggedIn, async (req, res, next) => {
     try {
         const {handle} = req.params
         const result = await Company.getByHandle(handle)
@@ -62,7 +67,7 @@ router.get('/:handle', async (req, res, next) => {
              jobs.push(job)
         })
         data.push(jobs)
-        res.json({ data })
+        res.json({ company:data })
     } catch (e) {
         next(e)
     }
@@ -70,7 +75,7 @@ router.get('/:handle', async (req, res, next) => {
 //--------------------------------------------------------------------------------------------------------------
 
 // create a company
-router.post('/', async (req, res, next) => {
+router.post('/', ensureAdmin, async (req, res, next) => {
     try {
         const company = req.body
         const validate = schema.validate(company, companiesSchema)
@@ -87,7 +92,7 @@ router.post('/', async (req, res, next) => {
 })
 //--------------------------------------------------------------------------------------------------------------
 // create a company
-router.patch('/:handle', async (req, res, next) => {
+router.patch('/:handle',ensureAdmin, async (req, res, next) => {
     try {
         const company = req.body
         const result = await Company.update(company, req.params.handle)
@@ -97,7 +102,7 @@ router.patch('/:handle', async (req, res, next) => {
     }
 })
 //--------------------------------------------------------------------------------------------------------------
-router.delete('/:handle', async (req, res, next) => {
+router.delete('/:handle',ensureAdmin, async (req, res, next) => {
     try {
 
         await Company.delete(req.params.handle)
