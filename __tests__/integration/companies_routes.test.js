@@ -93,7 +93,6 @@ describe('GET/companies', () => {
         const res = await request(app).get(`/companies?search=${handle}`).send({_token})
         expect(res.statusCode).toEqual(404)
         expect(res.body).toHaveProperty("message", "Company noCompany does not exist")
-        // expect(res.body.company).toHaveProperty("description", test_comp.description)
 
     })
     test('test reading companies, min_employees ', async () => {

@@ -6,11 +6,9 @@ const { SECRET_KEY } = require('../config')
 function authenticateJWT(req, res, next) {
     try {
         // console.log('.......auth working......')
-        // console.log(req.body)
         const token = req.body._token;
         const payload = jwt.verify(token, SECRET_KEY)
         req.user = payload
-        // console.log(req.user)
         return next()
 
     } catch (e) {
