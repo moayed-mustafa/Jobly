@@ -79,15 +79,36 @@ describe('GET/companies', () => {
 
     })
 
-    // test('test reading companies, serach on query ', async () => {
-    //     handle = test_comp1.handle
-    //     const res = await request(app).get(`/companies?search=${handle}`).send({_token})
-    //     console.log(res.body)
-    //     expect(res.statusCode).toEqual(200)
-    //     expect(res.body.company).toHaveProperty("company", test_comp.handle)
-    //     expect(res.body.company).toHaveProperty("description", test_comp.description)
+    test('test reading companies, serach on query ', async () => {
+        // create a user
+        // todo: this test is not producing the expected behaviour!
+        _user_ = {
+            "username": "test_",
+            "password": "password",
+            "first_name": "test_user",
+            "last_name": "user",
+            "email": "test_user_use@gmail.com",
+            "is_admin": true
+        }
+        let signup = await request(app).post('/auth/signup').send(_user_)
+        const _token_ = signup.body.token
+        // create a company
+        test_post = {
+            "handle": "test_post",
+            "name" : "test_post_Inc.",
+            "num_employees":300,
+            "description": "testing this post route right now!",
+            "_token": _token_
+        }
+        const result = await request(app).post(`/companies`).send(test_post)
+        // get the company
+        let handle = test_post.handle
+        const res = await request(app).get(`/companies?search=${handle}`).send({_token:_token_})
+        expect(res.statusCode).toEqual(200)
+        expect(res.body.company).toHaveProperty("company", test_comp.handle)
+        expect(res.body.company).toHaveProperty("description", test_comp.description)
 
-    // })
+    })
     test('test reading companies, serach on query, company does not exist ', async () => {
        let handle = 'noCompany'
         const res = await request(app).get(`/companies?search=${handle}`).send({_token})
@@ -167,7 +188,7 @@ describe('POST/companies', () => {
 
     })
 })
-//--------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------
 describe('PATCH/companies', () => {
     // add no admin tests
     test('update an existing company, user authorized', async () => {
@@ -205,7 +226,7 @@ describe('PATCH/companies', () => {
 
     })
 })
-//--------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------
 describe('DELETE/companies', () => {
     test('delete a company, user authorized', async () => {
         const res = await request(app).delete(`/companies/${test_comp.handle}`).send({_token})

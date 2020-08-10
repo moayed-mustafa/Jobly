@@ -1,7 +1,6 @@
 const request = require('supertest')
 const app = require('../../app')
 
-const Company = require('../../models/company')
 const User = require('../../models/user')
 
 process.env.NODE_ENV === 'test'
