@@ -47,7 +47,7 @@ afterAll(async () => {
 describe('Sign up a user', () => {
     test('sign up a user, success', async () => {
         let test_user = {
-            "username": "_test_signup",
+            "username": "_test_",
             "password": "password",
             "first_name": "test_signup",
             "last_name": "mustafa",
