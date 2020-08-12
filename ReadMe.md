@@ -1,8 +1,8 @@
 # Jobly
 
  ### Installation:
- - To run jobly on your local machine, make sure to first head to package.json file and npm install
- the dependencies listed there.
+ - To run jobly on your local machine, npm install
+ the dependencies listed in the package.json file.
 
  - run the express server locally using the following command:-
     - nodemon server.js
