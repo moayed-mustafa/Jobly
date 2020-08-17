@@ -25,14 +25,13 @@ class Company{
     static async getByHandle(handle){
         const results = await db.query(`
         SELECT c.handle as company , c.num_employees, c.description, j.title, j.salary, j.equity FROM companies AS c
-        JOIN jobs AS j
+        LEFT OUTER JOIN jobs AS j
         ON c.handle = j.company_handle
         WHERE c.handle = $1
         `, [handle])
         if (results.rowCount == 0) {
             throw new ExpressError(`Company ${handle} does not exist`, 404)
         }
-        console.log(results.rows)
         return results.rows
     }
     //--------------------------------------------------------------------------------------------------------------
